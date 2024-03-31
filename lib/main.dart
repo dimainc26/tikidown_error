@@ -1,15 +1,29 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tikidown/CONSTANTS/colors.dart';
 import 'package:tikidown/CONSTANTS/pages.dart';
-import 'package:tikidown/PAGES/HOME/home_controller.dart';
-import 'package:tikidown/PAGES/HOME/home_view.dart';
+import 'firebase_options.dart';
 
-void main() async {
+Future<void> main() async {
   await GetStorage.init();
-  // MobileAds.instance.initialize();
-  Get.put(HomeController());
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  FlutterError.onError = (FlutterErrorDetails errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+
   runApp(const MyApp());
 }
 

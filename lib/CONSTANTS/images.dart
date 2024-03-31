@@ -11,8 +11,8 @@ const String music_gif = "${img}music.gif";
 const String cover_gif = "${img}cover.gif";
 
 // Splash
-const String logoAnim = "${img}logo.riv";
-const String loaderAnim = "${img}loader.riv";
+// const String logoAnim = "${img}logo.riv";
+// const String loaderAnim = "${img}loader.riv";
 
 // ICONS
 const String home_icon = "${img}home.svg";
@@ -46,9 +46,9 @@ const String lock_icon = "${img}lock.svg";
 const String unlock_icon = "${img}unlock.svg";
 
 // OnBoard
-const String onboardImg1 = "${img}img1.png";
-const String onboardImg2 = "${img}img2.png";
-const String onboardImg3 = "${img}img3.png";
-const String anim1 = "${img}a.riv";
-const String anim2 = "${img}b.riv";
-const String anim3 = "${img}c.riv";
+// const String onboardImg1 = "${img}img1.png";
+// const String onboardImg2 = "${img}img2.png";
+// const String onboardImg3 = "${img}img3.png";
+// const String anim1 = "${img}a.riv";
+// const String anim2 = "${img}b.riv";
+// const String anim3 = "${img}c.riv";

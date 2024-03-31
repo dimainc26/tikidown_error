@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "40491801389",
+    "project_id": "tikidown-6ce8d",
+    "storage_bucket": "tikidown-6ce8d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:40491801389:android:698172527b6602f645d1a4",
+        "android_client_info": {
+          "package_name": "inc.dima.tikidown"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKzTAfeva1TPiNCZSCyT2mR0PREVArmnY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,7 +1,11 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:tikidown/PAGES/GALLERY/gallery_binding.dart';
+import 'package:tikidown/PAGES/GALLERY/gallery_view.dart';
 import 'package:tikidown/PAGES/HOME/home_binding.dart';
 import 'package:tikidown/PAGES/HOME/home_view.dart';
+import 'package:tikidown/PAGES/MUSIC/music_binding.dart';
+import 'package:tikidown/PAGES/MUSIC/music_view.dart';
 
 part 'routes.dart';
 
@@ -36,18 +40,18 @@ class AppPages {
     //     name: '/swipes',
     //     page: () => const SwipeScreen(),
     //     binding: SwipeBinding()),
-    // GetPage(
-    //     name: '/gallery',
-    //     page: () => const GalleryScreen(),
-    //     binding: GalleryBinding()),
+    GetPage(
+        name: '/gallery',
+        page: () => const GalleryScreen(),
+        binding: GalleryBinding()),
     // GetPage(
     //     name: '/player',
     //     page: () => const PlayerScreen(),
     //     binding: PlayerBinding()),
-    // GetPage(
-    //     name: '/music',
-    //     page: () => const MusicScreen(),
-    //     binding: MusicBinding()),
+    GetPage(
+        name: '/music',
+        page: () => const MusicScreen(),
+        binding: MusicBinding()),
     // GetPage(
     //     name: '/home',
     //     page: () => const SwipeScreen(),
