@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:tikidown/CONSTANTS/colors.dart';
 import 'package:tikidown/CONSTANTS/images.dart';
 import 'package:tikidown/CONSTANTS/texts_styles.dart';
+import 'package:tikidown/MODELS/AdController.dart';
 import 'package:tikidown/PAGES/HOME/home_controller.dart';
 import 'package:tikidown/WIDGETS/buttons.dart';
 
@@ -14,6 +16,10 @@ class HomeScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(AdController());
+    final adController = Get.find<AdController>();
+    adController.createBannerAd();
+
     return Scaffold(
       body: Stack(
         alignment: Alignment.center,
@@ -136,25 +142,22 @@ class HomeScreen extends GetView<HomeController> {
                         padding: const EdgeInsets.only(top: 20),
                         child: Column(
                           children: [
-                            // Obx(
-                            //   () => adController.startBannerAd.value == true
-                            //       ? SizedBox(
-                            //           height: adController.bannerAd!.size.height
-                            //               .toDouble(),
-                            //           width: adController.bannerAd!.size.width
-                            //               .toDouble(),
-                            //           child:
-                            //               AdWidget(ad: adController.bannerAd!),
-                            //         )
-                            //       : Text(""),
-                            // ),
-                            TextButton(
-                                onPressed: () =>
-                                    controller.checkClipboardForLink(),
-                                child: const Text("Intent")),
-                            TextButton(
-                                onPressed: () => controller.shareApp(),
-                                child: const Text("Share Files"))
+                            // Obx(() => adController.startBannerAd.value == true
+                            //     ? SizedBox(
+                            //         height: adController.bannerAd!.size.height
+                            //             .toDouble(),
+                            //         width: adController.bannerAd!.size.width
+                            //             .toDouble(),
+                            //         child: AdWidget(ad: adController.bannerAd!),
+                            //       )
+                            //     : const SizedBox()),
+                            // TextButton(
+                            //     onPressed: () =>
+                            //         controller.checkClipboardForLink(),
+                            //     child: const Text("Intent")),
+                            // TextButton(
+                            //     onPressed: () => controller.shareApp(),
+                            //     child: const Text("Share Files"))
                           ],
                         ),
                       ),
@@ -253,17 +256,17 @@ class HomeScreen extends GetView<HomeController> {
                         ),
                       ),
                     ),
-                    // Obx(
-                    //   () => adController.startBannerAd.value == true
-                    //       ? SizedBox(
-                    //           height: adController.bannerAd2!.size.height
-                    //               .toDouble(),
-                    //           width:
-                    //               adController.bannerAd2!.size.width.toDouble(),
-                    //           child: AdWidget(ad: adController.bannerAd2!),
-                    //         )
-                    //       : const Text(""),
-                    // ),
+                    Obx(
+                      () => adController.startBannerAd.value == true
+                          ? SizedBox(
+                              height: adController.bannerAd2!.size.height
+                                  .toDouble(),
+                              width:
+                                  adController.bannerAd2!.size.width.toDouble(),
+                              child: AdWidget(ad: adController.bannerAd2!),
+                            )
+                          : const Text(""),
+                    ),
                     Container(
                       height: 60,
                       width: Get.width - 76,
@@ -316,132 +319,165 @@ class HomeScreen extends GetView<HomeController> {
                           },
                           itemBuilder: (BuildContext context, int pageIndex) {
                             return pageIndex == 0
-                                ? Obx(
-                                    () => GridView.builder(
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 2),
-                                      shrinkWrap: true,
-                                      itemCount: controller.filesList.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            controller.selectionMode.value ==
-                                                    false
-                                                ? Get.toNamed("/player",
-                                                    arguments: {
-                                                        "list": controller
-                                                            .filesList,
-                                                        "index": index
-                                                      })
-                                                : controller
-                                                        .filesList[index]
-                                                            ["isSelected"]
-                                                        .value =
-                                                    !controller
-                                                        .filesList[index]
-                                                            ["isSelected"]
-                                                        .value;
-                                            controller.oneSelected(
-                                                list: controller.filesList);
-                                          },
-                                          onLongPress: controller
-                                                      .selectionMode.value ==
-                                                  false
-                                              ? () {
-                                                  controller
-                                                          .filesList[index]
-                                                              ["isSelected"]
-                                                          .value =
-                                                      !controller
-                                                          .filesList[index]
-                                                              ["isSelected"]
-                                                          .value;
+                                ? Obx(() {
+                                    return controller.filesList.isEmpty
+                                        ? Container(
+                                            width: Get.width,
+                                            height: Get.height,
+                                            decoration: const BoxDecoration(
+                                                image: DecorationImage(
+                                                    image:
+                                                        AssetImage(video_gif))),
+                                          )
+                                        : GridView.builder(
+                                            gridDelegate:
+                                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                                    crossAxisCount: 2),
+                                            shrinkWrap: true,
+                                            itemCount:
+                                                controller.filesList.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  controller.selectionMode
+                                                              .value ==
+                                                          false
+                                                      ? Get.toNamed("/player",
+                                                          arguments: {
+                                                              "list": controller
+                                                                  .filesList,
+                                                              "index": index
+                                                            })
+                                                      : controller
+                                                              .filesList[index]
+                                                                  ["isSelected"]
+                                                              .value =
+                                                          !controller
+                                                              .filesList[index]
+                                                                  ["isSelected"]
+                                                              .value;
                                                   controller.oneSelected(
                                                       list:
                                                           controller.filesList);
-                                                }
-                                              : null,
-                                          child: Obx(
-                                            () => Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Obx(
-                                                  () => Container(
-                                                    margin: const EdgeInsets
-                                                        .symmetric(
-                                                        vertical: 4,
-                                                        horizontal: 6),
-                                                    width: Get.width,
-                                                    height: 130,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
-                                                      image: DecorationImage(
-                                                        image: FileImage(File(
-                                                            controller.filesList[
-                                                                    index]
-                                                                ["cover"])),
-                                                        fit: BoxFit.fitWidth,
-                                                        filterQuality:
-                                                            FilterQuality.high,
-                                                        colorFilter: controller
-                                                                    .filesList[
-                                                                        index][
-                                                                        "isSelected"]
-                                                                    .value ==
-                                                                true
-                                                            ? const ColorFilter
-                                                                .mode(
-                                                                Colors.red,
-                                                                BlendMode.color)
-                                                            : const ColorFilter
-                                                                .mode(
-                                                                Colors
-                                                                    .transparent,
-                                                                BlendMode
-                                                                    .color),
+                                                },
+                                                onLongPress: controller
+                                                            .selectionMode
+                                                            .value ==
+                                                        false
+                                                    ? () {
+                                                        controller
+                                                                .filesList[
+                                                                    index][
+                                                                    "isSelected"]
+                                                                .value =
+                                                            !controller
+                                                                .filesList[
+                                                                    index][
+                                                                    "isSelected"]
+                                                                .value;
+                                                        controller.oneSelected(
+                                                            list: controller
+                                                                .filesList);
+                                                      }
+                                                    : null,
+                                                child: Obx(
+                                                  () => Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Obx(
+                                                        () => Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  vertical: 4,
+                                                                  horizontal:
+                                                                      6),
+                                                          width: Get.width,
+                                                          height: 130,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        12),
+                                                            image:
+                                                                DecorationImage(
+                                                              image: FileImage(
+                                                                  File(controller
+                                                                              .filesList[
+                                                                          index]
+                                                                      [
+                                                                      "cover"])),
+                                                              fit: BoxFit
+                                                                  .fitWidth,
+                                                              filterQuality:
+                                                                  FilterQuality
+                                                                      .high,
+                                                              colorFilter: controller
+                                                                          .filesList[
+                                                                              index]
+                                                                              [
+                                                                              "isSelected"]
+                                                                          .value ==
+                                                                      true
+                                                                  ? const ColorFilter
+                                                                      .mode(
+                                                                      Colors
+                                                                          .red,
+                                                                      BlendMode
+                                                                          .color)
+                                                                  : const ColorFilter
+                                                                      .mode(
+                                                                      Colors
+                                                                          .transparent,
+                                                                      BlendMode
+                                                                          .color),
+                                                            ),
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 20),
+                                                        child:
+                                                            SingleChildScrollView(
+                                                          scrollDirection:
+                                                              Axis.horizontal,
+                                                          child: Text(controller
+                                                                  .filesList[
+                                                              index]['title']),
+                                                          // child: Text(controller
+                                                          //         .filesList[index]
+                                                          //     ["name"]),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 20),
+                                                        child:
+                                                            SingleChildScrollView(
+                                                          scrollDirection:
+                                                              Axis.horizontal,
+                                                          child: Text(controller
+                                                                      .filesList[
+                                                                  index]
+                                                              ['username']),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 20),
-                                                  child: SingleChildScrollView(
-                                                    scrollDirection:
-                                                        Axis.horizontal,
-                                                    child: Text(controller
-                                                            .filesList[index]
-                                                        ['title']),
-                                                    // child: Text(controller
-                                                    //         .filesList[index]
-                                                    //     ["name"]),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 20),
-                                                  child: SingleChildScrollView(
-                                                    scrollDirection:
-                                                        Axis.horizontal,
-                                                    child: Text(controller
-                                                            .filesList[index]
-                                                        ['username']),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  )
+                                              );
+                                            },
+                                          );
+                                  })
                                 : pageIndex == 1
                                     ? Obx(() {
                                         return controller.filesList.isEmpty

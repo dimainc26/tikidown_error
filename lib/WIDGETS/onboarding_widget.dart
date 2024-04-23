@@ -11,7 +11,7 @@ class Onboard extends StatelessWidget {
     required this.icon,
     required this.img,
     required this.bgColor,
-    required this.animation,
+    // required this.animation,
     super.key,
   });
 
@@ -20,7 +20,7 @@ class Onboard extends StatelessWidget {
   final String txt3;
   final String icon;
   final String img;
-  final String animation;
+  // final String animation;
   final Color bgColor;
 
   @override
@@ -34,11 +34,8 @@ class Onboard extends StatelessWidget {
       child: Stack(children: [
         SizedBox(
           width: Get.width,
-          height: Get.height,
-          // child: RiveAnimation.asset(
-          //   animation,
-          //   fit: BoxFit.fitHeight,
-          // ),
+          height: Get.height / 2,
+          child: Image.asset(img),
         ),
         Positioned(
           top: Get.height / 2,

@@ -197,6 +197,7 @@ class VideoModel {
       if (verifyStorage.existsDirectory(
           Directory("/storage/emulated/0/Music/TikiDownsMusics"))) {
         try {
+          log("on est ici wo");
           _dio.download(datas.music!, filePath,
               onReceiveProgress: (download, totalSize) {
             downloadProgress.value = download / totalSize;
@@ -205,7 +206,6 @@ class VideoModel {
             box
                 .write("dataList", jsonEncode(dataList))
                 .then((value) => box.save());
-            log("endMusicdownload");
           });
         } catch (e) {
           log(e.toString());
@@ -217,7 +217,7 @@ class VideoModel {
     } else if (mode == "images") {
       int totalImgs = datas!.images!.length;
 
-      for (var i = 0; i <= totalImgs; i++) {
+      for (var i = 0; i < totalImgs; i++) {
         String imgPath =
             File("/storage/emulated/0/Pictures/TikiDownsImages/$name$i.jpg")
                 .path;
@@ -243,9 +243,10 @@ class VideoModel {
               box
                   .write("dataList", jsonEncode(dataList))
                   .then((value) => box.save());
+              return 1.0;
             });
           } catch (e) {
-            log(e.toString());
+            log("image download error: " + e.toString());
             return 0.0.obs;
           }
         }

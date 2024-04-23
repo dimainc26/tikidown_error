@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:tikidown/CONSTANTS/colors.dart';
 import 'package:tikidown/CONSTANTS/pages.dart';
 import 'firebase_options.dart';
@@ -11,6 +12,8 @@ import 'firebase_options.dart';
 Future<void> main() async {
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

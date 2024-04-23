@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tikidown/CONSTANTS/images.dart';
 import 'package:tikidown/CONSTANTS/pages.dart';
+import 'package:tikidown/MODELS/AdController.dart';
 import 'package:tikidown/MODELS/VideoModel.dart';
 import 'package:tikidown/MODELS/videos_class.dart';
 import 'package:tikidown/MYPACKAGES/PhoneInfos.dart';
@@ -38,6 +39,9 @@ class HomeController extends GetxController
   PhoneInfos phoneInfos = PhoneInfos();
   VideoInfo? videoData = VideoInfo(url: "");
 
+  // Controllers
+  final AdController adController = Get.put(AdController());
+
   @override
   void onInit() {
     super.onInit();
@@ -47,6 +51,9 @@ class HomeController extends GetxController
     downPageController = PageController(initialPage: tabSelectedPage.value);
     currentIndicator = pageController.initialPage.obs;
     getVideos();
+    Future.delayed(const Duration(seconds: 5), () {
+      adController.showAppOpenAdIfAvailable();
+    });
   }
 
   @override
@@ -57,7 +64,7 @@ class HomeController extends GetxController
 
   Future<Map<String, dynamic>> getPhoneInfo() async {
     var phone = await phoneInfos.deviceInfos();
-    phone.addAll({"photoPermission": false, "musicPrmission": false});
+    phone.addAll({"photoPermission": false, "musicPermission": false});
     return phone;
   }
 
@@ -202,8 +209,8 @@ class HomeController extends GetxController
       downloading.value = true;
       downloadProgress = await videoModel.downloadMedia(
           mode: "images", datas: videoData!, date: DateTime.now());
+      log("${downloadProgress.value}   ${downloading.value}");
       if (downloadProgress.value == 1.0) {
-        // log("${downloadProgress.value}   ${downloading.value}");
         downloading.value = false;
       }
     } else {
@@ -294,19 +301,19 @@ class HomeController extends GetxController
 
   downloadMusic() async {
     Map<String, dynamic> phone = jsonDecode(box.read("phone"));
-    bool okPermission = phone["photoPermission"];
+    bool okPermission = phone["musicPermission"];
     if (okPermission) {
       downloading.value = true;
+      log("message  ici");
       downloadProgress = await videoModel.downloadMedia(
           mode: "music", datas: videoData!, date: DateTime.now());
     } else {
       if (await verifyStorage.requestPermission(phone["version.sdkInt"] < 33
           ? Permission.storage
           : Permission.audio)) {
-        phone["photoPermission"] = true;
+        phone["musicPermission"] = true;
         box.write("phone", jsonEncode(phone));
 
-        // log(phone["photoPermission"].toString());
         downloadMusic();
       } else {
         Get.bottomSheet(const ErrorPopup(
@@ -352,22 +359,18 @@ class HomeController extends GetxController
   getImages() async {
     filesList = [].obs;
     filesList = await getMedia.getImages();
-    // log("list() : ${filesList.length}");
+    filesList = filesList.reversed.toList().obs;
   }
 
   getVideos() async {
     filesList = [].obs;
     filesList = await getMedia.getVideos();
-    // log("list() : ${filesList.length}");
+    filesList = filesList.reversed.toList().obs;
   }
 
   getMusics() async {
     filesList = await getMedia.getMusics();
-    for (var file in filesList) {
-      if (file is File) {}
-    }
-
-    // log("list() : ${filesList.length}");
+    filesList = filesList.reversed.toList().obs;
   }
 
   // -------------------------------------------------------------------------

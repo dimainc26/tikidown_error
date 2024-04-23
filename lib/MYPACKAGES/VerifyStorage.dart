@@ -41,43 +41,27 @@ class VerifyStorage {
 
   createDirectory() async {
     String androidDirectory = await findAndroidDirectory();
-    // TikidownsPictures
+
     Directory imageDirectory =
         Directory("$androidDirectory/Pictures/TikiDownsImages");
     if (!imageDirectory.existsSync()) {
-      // log("imageDirectory don't exists. Create now of course...");
-      imageDirectory.create(recursive: true).then((tikidownDirectory) {
-        // log(tikidownDirectory.path);
-      });
+      imageDirectory.create(recursive: true).then((tikidownDirectory) {});
     }
 
-    // TikidownsVideos
     Directory videoDirectory =
         Directory("$androidDirectory/Movies/TikiDownsVideos");
     if (!videoDirectory.existsSync()) {
-      // log("videoDirectory don't exists. Create now of course...");
-      videoDirectory.create(recursive: true).then((tikidownDirectory) {
-        // log(tikidownDirectory.path);
-      });
+      videoDirectory.create(recursive: true).then((tikidownDirectory) {});
     }
 
-    // TikidownsMusics
     Directory musicDirectory =
         Directory("$androidDirectory/Music/TikiDownsMusics");
     if (!musicDirectory.existsSync()) {
-      // log("musicDirectory don't exists. Create now of course...");
-      musicDirectory.create(recursive: true).then((tikidownDirectory) {
-        // log(tikidownDirectory.path);
-      });
+      musicDirectory.create(recursive: true).then((tikidownDirectory) {});
     }
-
-    // log("IMG: ${imageDirectory.path}");
-    // log("VID: ${videoDirectory.path}");
-    // log("MP3: ${musicDirectory.path}");
   }
 
   bool existsDirectory(Directory directory) {
-    // log(directory.existsSync().toString());
     return directory.existsSync();
   }
 

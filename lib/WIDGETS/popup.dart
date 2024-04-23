@@ -652,8 +652,7 @@ class VideoPopup extends StatelessWidget {
                           bottom: 20,
                           child: InkWell(
                             onTap: () {
-                              if (data.music == "" || data.music == null) {
-                              } else {
+                              if (data.music != "" && data.music != null) {
                                 controller.downloadMusic();
                               }
                               Get.back();
