@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -50,6 +51,7 @@ class HomeController extends GetxController
     tabBarController = TabController(length: 3, vsync: this, initialIndex: 0);
     downPageController = PageController(initialPage: tabSelectedPage.value);
     currentIndicator = pageController.initialPage.obs;
+    checkClipboardForLink();
     getVideos();
     Future.delayed(const Duration(seconds: 5), () {
       adController.showAppOpenAdIfAvailable();
@@ -196,8 +198,6 @@ class HomeController extends GetxController
       }
     }
   }
-
-  checkClipboardForLink() {}
 
   // -------------------------------------------------------------------------
   // Downloads
@@ -374,4 +374,21 @@ class HomeController extends GetxController
   }
 
   // -------------------------------------------------------------------------
+
+  // Check Clipboard
+
+  void checkClipboardForLink() async {
+    ClipboardData? clipboardData =
+        await Clipboard.getData(Clipboard.kTextPlain);
+    String clipboardDataText = clipboardData?.text ?? "";
+    // log(clipboardDataText);
+    if (Uri.tryParse(clipboardDataText)?.hasAbsolutePath ?? false) {
+      fetchDatas(link: clipboardDataText);
+      Future.delayed(const Duration(seconds: 3), () {
+        Clipboard.setData(const ClipboardData(text: ""));
+      });
+    } else {
+      log("Aucun lien trouvé dans le presse-papiers.");
+    }
+  }
 }
